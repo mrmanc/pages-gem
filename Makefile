@@ -8,6 +8,10 @@ image:
 image_alpine:
 	${DOCKER} build -t ${TAG} . -f Dockerfile.alpine
 
+VERSION := $(shell ruby -r./lib/github-pages/version.rb -e "puts GitHubPages::VERSION")
+publish_alpine:
+	${DOCKER} buildx build -f Dockerfile.alpine --platform linux/amd64,linux/arm64 -t markcrossfield/pages-gem:${VERSION}-alpine -t markcrossfield/pages-gem:latest-alpine --push .
+
 # Produce a bash shell
 shell:
 	${DOCKER} run --rm -it \
